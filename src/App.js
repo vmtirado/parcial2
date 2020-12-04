@@ -13,8 +13,9 @@ const locale =
 ;
 
 function App() {
-  const [dataEn, setdataEn] = useState([]);
-  const [dataEs, setDataEs] = useState([]);
+  const [en, setlangEn] = useState([]);
+
+  const [es, setlangEs] = useState([]);
 
   useEffect(() => {
     if (!navigator.onLine) {
@@ -24,21 +25,21 @@ function App() {
       ) {
         
       } else {
-        setdataEn(JSON.parse(localStorage.getItem("en")));
-        setDataEs(JSON.parse(localStorage.getItem("es")));
+        setlangEn(JSON.parse(localStorage.getItem("en")));
+        setlangEs(JSON.parse(localStorage.getItem("es")));
       }
     } else {
       fetch(esURL)
         .then((res) => res.json())
         .then((res) => {
           localStorage.setItem("es", JSON.stringify(res));
-          setDataEs(res);
+          setlangEs(res);
         });
       fetch(enURL)
         .then((res) => res.json())
         .then((res) => {
           localStorage.setItem("en", JSON.stringify(res));
-          setdataEn(res);
+          setlangEn(res);
         });
     }
   }, []);
@@ -49,15 +50,19 @@ function App() {
   let lang = String(locale).substring(0, 2);
 
   if (lang === "es") {
-    messages[String(locale)] = dataEs;
+    messages[String(locale)] = es;
+
     headers[0] = "#";
     headers[1] = "Imagen ";
     headers[2] = "Nombre";
     headers[3] = "Descripcion";
     headers[4] = "Altura";
     headers[5] = "Peso";
+ 
   } else {
-    messages[String(locale)] = dataEn;
+    messages[String(locale)] = en;
+
+
     headers[0] = "#";
     headers[1] = "Image";
     headers[2] = "Name";
@@ -74,7 +79,6 @@ function App() {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>#</th>
               <th>{headers[0]}</th>
               <th>{headers[1]}</th>
               <th>{headers[2]}</th>
